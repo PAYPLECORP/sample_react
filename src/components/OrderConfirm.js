@@ -46,7 +46,6 @@ function OrderConfirm() {
         /*
          *  공통 설정
          */
-        obj.PCD_CPAY_VER = content.pcd_cpay_ver;		             // (필수) 결제창 버전 (Default : 1.0.1)
         obj.PCD_PAY_TYPE = content.pay_type;			             // (필수) 결제 방법 (transfer | card)
         obj.PCD_PAY_WORK = content.work_type;			             // (필수) 결제요청 업무구분 (AUTH : 본인인증+계좌등록, CERT: 본인인증+계좌등록+결제요청등록(최종 결제승인요청 필요), PAY: 본인인증+계좌등록+결제완료)
         obj.PCD_CARD_VER = content.card_ver || '01';			     // DEFAULT: 01 (01: 정기결제 플렛폼, 02: 일반결제 플렛폼), 카드결제 시 필수
@@ -120,7 +119,7 @@ function OrderConfirm() {
 
         // 가맹점 인증
         authenticate().then((res) => {
-            console.log('Auth Result:', {...res.data});
+            console.log('Auth Result:', res.data);
             // 토큰값 세팅
             obj.PCD_CST_ID = res.data.cst_id;         // 가맹점 인증 후 리턴 받은 cst_id Token
             obj.PCD_CUST_KEY = res.data.custKey;      // 가맹점 인증 후 리턴 받은 custKey Token

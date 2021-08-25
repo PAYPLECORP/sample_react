@@ -6,7 +6,6 @@ function Order() {
     const history = useHistory();
     const [content] = useState({
         // Default form set
-        pcd_cpay_ver: '1.0.1',                        // 결제창 버전 (Default : 1.0.1)
         is_direct: 'N',                               // 결제창 방식 (DIRECT: Y | POPUP: N)
         pay_type: 'transfer',                         // 결제수단
         work_type: 'CERT',                            // 결제요청방식
@@ -44,18 +43,6 @@ function Order() {
     return (
         <div>
             <form id="orderForm" name="orderForm" onChange={handleChange}>
-                <div>
-                    <label htmlFor="payple_payer_id">CPAY_LIB_VER</label> <select
-                    name="pcd_cpay_ver">
-                    <option value="1.0.1">1.0.1</option>
-                </select>
-                    <label>테스트 환경</label>
-                    <select name="test_env">
-                        <option value="live">live</option>
-                        <option value="staging">staging</option>
-                        <option value="dev">dev</option>
-                    </select>
-                </div>
                 <div>
                     <select name="simple_flag">
                         <option value="N">단건결제</option>
