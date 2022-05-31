@@ -4,7 +4,7 @@ const router = express.Router();
 /* POST /react/api
  * IOS, AOS앱 및 인앱브라우저에서는 결제창 호출 방식을 다이렉트로 연결해야 합니다.
  * 다이렉트 호출 방식은 결제 페이지로 이동 후, 결제가 완료되면 POST를 통해 결제 결과 파라미터를 보내줍니다.
- * ref: http://docs.payple.kr/faq/pay/callback
+ * ref: https://developer.payple.kr/service/faq
  */
 router.post('/', (req, res) => {
     const data = {

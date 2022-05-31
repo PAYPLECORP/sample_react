@@ -89,8 +89,7 @@ function OrderResult() {
 
     /*
      * 환불(승인취소) 파라미터 세팅 ('결제승인취소' 버튼 클릭시 호출)
-     * ref: (bank): http://docs.payple.kr/bank/pay/cancel
-     * ref: (card): http://docs.payple.kr/card/pay/cancel
+     * ref: https://developer.payple.kr/etc-api/cancel-payment
      */
     const handlePayRefund = (e) => {
         e.preventDefault();

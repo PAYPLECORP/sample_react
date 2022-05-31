@@ -3,10 +3,7 @@ import axios from "axios";
 
 /*
  * 가맹점 인증 함수
- * 케이스별로 가맹점 인증 요청에 사용하는 요청변수가 다르니, Payple에서 제공하는 가이드를 통해 요청변수를 확인하시길 바랍니다.
- * ref: http://docs.payple.kr/bank/install/auth
- *
- * CORS 문제 발생시 참고 링크 : http://docs.payple.kr/faq
+ * 케이스별로 가맹점 인증 요청에 사용하는 요청변수가 다르니, 결제방식별 연동가이드를 참고해주시길 바랍니다.
  */
 export const authenticate = (obj = {}) => {
     const form = new FormData();

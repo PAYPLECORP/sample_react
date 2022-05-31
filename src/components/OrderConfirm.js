@@ -17,7 +17,7 @@ function OrderConfirm() {
     let [payResult] = useState({});
 
     /* 결과를 받고자 하는 callback 함수 (callback 함수를 설정할 경우 PCD_RST_URL 이 작동하지 않음)
-     * ref: http://docs.payple.kr/faq/pay/callback
+     * ref: https://developer.payple.kr/service/faq
      */
     const getResult = (res) => {
         if (res.PCD_PAY_RST === 'success') {
@@ -36,9 +36,7 @@ function OrderConfirm() {
     }
 
     /*
-     *  결제창에 보낼 파라미터 세팅 ('결제하기' 버튼 클릭시 호출)
-     *  ref: http://docs.payple.kr/bank/pay/outline (빌링키방식 transfer)
-     *  ref: http://docs.payple.kr/card/pay/outline (빌링키방식 card)
+     *  연동방식별 파라미터 세팅 ('결제하기' 버튼 클릭시 호출)
      */
     const handleClick = (e) => {
         e.preventDefault();
@@ -54,14 +52,14 @@ function OrderConfirm() {
         // IOS, AOS앱 및 인앱브라우저에서는 결제창 호출 방식을 다이렉트로 연결해 주세요.
         // content.is_direct === 'Y' 인 경우, POST 요청을 처리할 서버 도메인을 입력해 주세요.
         // direct(절대경로): https://payple.kr/sample/pay.html | popup(상대경로) https:// 로 시작하지 않고, 중간경로( /sample/pay.html)를 표기한 URL
-        // ref: http://docs.payple.kr/faq/pay/callback
+        // ref: https://developer.payple.kr/service/faq
         if (content.is_direct === 'Y' ? obj.PCD_RST_URL = process.env.REACT_APP_REMOTE_HOSTNAME + '/react/api' : obj.PCD_RST_URL = '/react/order_result') ;
         // obj.PCD_RST_URL = pcd_rst_url;							 // (필수) 결제(요청)결과 RETURN URL
 
         obj.payple_auth_file = '';	                                 // 인증파일경로 /절대경로/payple_auth_file (node.js => [app.js] app.post('/pg/auth', ...) {..}
 
         // (선택) 결과를 받고자 하는 callback 함수명 (callback함수를 설정할 경우 PCD_RST_URL 이 작동하지 않음)
-        // ref: http://docs.payple.kr/faq/pay/callback
+        // ref: https://developer.payple.kr/service/faq
         obj.callbackFunction = getResult;
 
         /*
@@ -121,8 +119,6 @@ function OrderConfirm() {
         authenticate().then((res) => {
             console.log('Auth Result:', res.data);
             // 토큰값 세팅
-            obj.PCD_CST_ID = res.data.cst_id;         // 가맹점 인증 후 리턴 받은 cst_id Token
-            obj.PCD_CUST_KEY = res.data.custKey;      // 가맹점 인증 후 리턴 받은 custKey Token
             obj.PCD_AUTH_KEY = res.data.AuthKey;      // 가맹점 인증 후 리턴 받은 AuthKey Token
             obj.PCD_PAY_URL = res.data.return_url;    // 가맹점 인증 후 리턴 받은 결제요청 URL
 
@@ -130,7 +126,7 @@ function OrderConfirm() {
 
             // 해당 함수를 불러오려면 cpay.payple.kr 스크립트 추가가 선행 되어야 합니다. /public/index.html
             // 가맹점 인증 후, 토큰 값을 추가 및 PaypleCpayPopup 함수 호출
-            window.PaypleCpayPopup(obj);
+            window.PaypleCpayAuthCheck(obj);
         }).catch((err) => {
             console.error(err)
         })
