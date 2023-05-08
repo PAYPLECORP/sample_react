@@ -1,10 +1,10 @@
-import React, {useState} from "react";
+import React, {useRef} from "react";
 import {useHistory} from "react-router";
 import $ from "jquery";
 
 function Order() {
     const history = useHistory();
-    const [content] = useState({
+    const content = useRef({
         // Default form set
         is_direct: 'N',                               // 결제창 방식 (DIRECT: Y | POPUP: N)
         pay_type: 'transfer',                         // 결제수단
@@ -29,14 +29,15 @@ function Order() {
     });
 
     const handleChange = (e) => {
-        content[e.target.name] = e.target.value;
+        console.log(content)
+        content.current[e.target.name] = e.target.value;
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         history.push({
             pathname: '/react/order_confirm',
-            state: {content: content},
+            state: {content: content.current},
         });
     }
 
@@ -60,7 +61,7 @@ function Order() {
 					<option value="transfer">계좌이체결제</option>
 					<option value="card">신용카드</option>
 			</select>
-			</span> <span id="card_ver_view" style={{display: content.pay_type !== "card" ? "none" : ""}}>
+			</span> <span id="card_ver_view" style={{display: content.current.pay_type !== "card" ? "none" : ""}}>
                     <select id="card_ver" name="card_ver">
 					<option value=''>=결제창 선택=</option>
 					<option value="01">카드 정기</option>
@@ -75,32 +76,32 @@ function Order() {
                 <div>
                     <label htmlFor="payer_no">구매자 고유번호</label> <input type="text"
                                                                       name="buyer_no" id="buyer_no"
-                                                                      defaultValue={content.buyer_no}/>
+                                                                      defaultValue={content.current.buyer_no}/>
                 </div>
                 <div>
                     <label htmlFor="buyer_name">구매자 이름</label> <input type="text"
                                                                       name="buyer_name" id="buyer_name"
-                                                                      defaultValue={content.buyer_name}/>
+                                                                      defaultValue={content.current.buyer_name}/>
                 </div>
                 <div>
                     <label htmlFor="buyer_hp">구매자 휴대폰번호</label> <input type="text"
                                                                        name="buyer_hp" id="buyer_hp"
-                                                                       defaultValue={content.buyer_hp}/>
+                                                                       defaultValue={content.current.buyer_hp}/>
                 </div>
                 <div>
                     <label htmlFor="buyer_email">구매자 Email</label> <input type="text"
                                                                           name="buyer_email" id="buyer_email"
-                                                                          defaultValue={content.buyer_email}/>
+                                                                          defaultValue={content.current.buyer_email}/>
                 </div>
                 <div>
                     <label htmlFor="buy_goods">구매상품</label> <input type="text"
                                                                    name="buy_goods" id="buy_goods"
-                                                                   defaultValue={content.buy_goods}/>
+                                                                   defaultValue={content.current.buy_goods}/>
                 </div>
                 <div>
                     <label htmlFor="buy_total">결제금액</label> <input type="text"
                                                                    name="buy_total" id="buy_total"
-                                                                   defaultValue={content.buy_total}/>
+                                                                   defaultValue={content.current.buy_total}/>
                 </div>
                 <div>
                     <label htmlFor="buy_istax">과세여부</label> <select id="buy_istax"
@@ -117,7 +118,7 @@ function Order() {
                 <div>
                     <label htmlFor="order_num">주문번호</label> <input type="text"
                                                                    name="order_num" id="order_num"
-                                                                   defaultValue={content.oid}/>
+                                                                   defaultValue={content.current.oid}/>
                 </div>
                 <div id="is_reguler_view">
                     <label htmlFor="is_reguler">정기결제</label> <select id="is_reguler"

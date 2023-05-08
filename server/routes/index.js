@@ -1,7 +1,8 @@
 const express = require("express");
+const axios = require("axios");
 const router = express.Router();
 
-/* POST /react/api
+/* POST /api
  * IOS, AOS앱 및 인앱브라우저에서는 결제창 호출 방식을 다이렉트로 연결해야 합니다.
  * 다이렉트 호출 방식은 결제 페이지로 이동 후, 결제가 완료되면 POST를 통해 결제 결과 파라미터를 보내줍니다.
  * ref: https://developer.payple.kr/service/faq
@@ -37,7 +38,40 @@ router.post('/', (req, res) => {
     };
 
     // React로 값 전송 (url parameters)
-    res.redirect('http://localhost:3000/react/order_result?' + encodeURIComponent(JSON.stringify(data)));
+    res.redirect(process.env.REACT_APP_HOSTNAME + '/react/order_result?' + encodeURIComponent(JSON.stringify(data)));
 });
+
+/* POST /api/auth
+   파트너 인증
+ */
+router.post('/auth', async (req, res, next) => {
+    try {
+        const caseParams = req.body;                           // 상황별 파트너 인증 파라미터
+        const params = {
+            cst_id: process.env.REACT_APP_CST_ID,                        // 파트너 ID (실결제시 발급받은 운영ID를 작성하시기 바랍니다.)
+            custKey: process.env.REACT_APP_CUST_KEY,                     // 파트너 인증키 (실결제시 발급받은 운영Key를 작성하시기 바랍니다.)
+            ...caseParams
+        };
+
+        /*  ※ Referer 설정 방법
+            TEST : referer에는 테스트 결제창을 띄우는 도메인을 넣어주셔야합니다. 결제창을 띄울 도메인과 referer값이 다르면 [AUTH0007] 응답이 발생합니다.
+            REAL : referer에는 가맹점 도메인으로 등록된 도메인을 넣어주셔야합니다.
+            다른 도메인을 넣으시면 [AUTH0004] 응답이 발생합니다.
+            또한, TEST에서와 마찬가지로 결제창을 띄우는 도메인과 같아야 합니다.
+        */
+        const {data} = await axios.post(process.env.REACT_APP_AUTH_URL, params, {
+            headers: {
+                'content-type': 'application/json',
+                'referer': process.env.REACT_APP_HOSTNAME
+            }
+        });
+
+        res.status(200).json(data);
+    } catch (e) {
+        console.error(e);
+        res.status(500).send(e.message);
+    }
+});
+
 
 module.exports = router;

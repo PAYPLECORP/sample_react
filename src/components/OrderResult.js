@@ -1,7 +1,6 @@
 import React from "react";
 import {useLocation} from "react-router";
 import $ from "jquery";
-import {authenticate} from "../common/authenticate";
 import axios from "axios";
 import {Redirect} from "react-router-dom";
 
@@ -49,7 +48,7 @@ function OrderResult() {
             axios.post(payConfirmURL, JSON.stringify(params), {
                 header: {
                     'content-type': 'application/json',
-                    'referer': process.env.REACT_APP_PCD_HTTP_REFERRER      //API 서버를 따로 두고 있는 경우, Referer 에 가맹점의 도메인 고정
+                    'referer': process.env.REACT_APP_HOSTNAME      //API 서버를 따로 두고 있는 경우, Referer 에 가맹점의 도메인 고정
                 }
             }).then(res => {
                 console.log(res.data)
@@ -94,7 +93,7 @@ function OrderResult() {
     const handlePayRefund = (e) => {
         e.preventDefault();
         if (window.confirm('환불(승인취소)요청을 전송합니다. \n진행하시겠습니까?')) {
-            authenticate({PCD_PAYCANCEL_FLAG: 'Y'}).then((res) => {
+            axios.post('/api/auth',{PCD_PAYCANCEL_FLAG: 'Y'}).then((res) => {
                 // 토큰값 세팅
                 const refundURL = res.data.return_url;                                // 리턴 받은 환불(승인취소) URL
                 const params = {
@@ -114,7 +113,7 @@ function OrderResult() {
                 axios.post(refundURL, JSON.stringify(params), {
                     header: {
                         'content-type': 'application/json',
-                        'referer': process.env.REACT_APP_PCD_HTTP_REFERRER           //API 서버를 따로 두고 있는 경우, Referer 에 가맹점의 도메인 고정
+                        'referer': process.env.REACT_APP_HOSTNAME           //API 서버를 따로 두고 있는 경우, Referer 에 가맹점의 도메인 고정
                     }
                 }).then(res => {
                     if (res.data.PCD_PAY_MSG) {
