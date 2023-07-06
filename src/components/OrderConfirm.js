@@ -44,10 +44,10 @@ function OrderConfirm() {
         /*
          *  공통 설정
          */
-        obj.PCD_PAY_TYPE = content.pay_type;			             // (필수) 결제 방법 (transfer | card)
-        obj.PCD_PAY_WORK = content.work_type;			             // (필수) 결제요청 업무구분 (AUTH : 본인인증+계좌등록, CERT: 본인인증+계좌등록+결제요청등록(최종 결제승인요청 필요), PAY: 본인인증+계좌등록+결제완료)
-        obj.PCD_CARD_VER = content.card_ver || '01';			     // DEFAULT: 01 (01: 정기결제 플렛폼, 02: 일반결제 플렛폼), 카드결제 시 필수
-        obj.PCD_PAYER_AUTHTYPE = content.auth_type;				     // (선택) [간편결제/정기결제] 본인인증 방식 (sms : 문자인증 | pwd : 패스워드 인증)
+        obj.PCD_PAY_TYPE = content.pay_type;			                                        // (필수) 결제 방법 (transfer | card)
+        obj.PCD_PAY_WORK = content.work_type;			                                        // (필수) 결제요청 업무구분 (AUTH : 본인인증+계좌등록, CERT: 본인인증+계좌등록+결제요청등록(최종 결제승인요청 필요), PAY: 본인인증+계좌등록+결제완료)
+        if (content.pay_type === 'card') obj.PCD_CARD_VER = content.card_ver || '01';		    // DEFAULT: 01 (01: 정기결제 플렛폼, 02: 일반결제 플렛폼), 카드결제 시 필수
+        obj.PCD_PAYER_AUTHTYPE = content.auth_type;				                                // (선택) [간편결제/정기결제] 본인인증 방식 (sms : 문자인증 | pwd : 패스워드 인증)
 
         // IOS, AOS앱 및 인앱브라우저에서는 결제창 호출 방식을 다이렉트로 연결해 주세요.
         // content.is_direct === 'Y' 인 경우, POST 요청을 처리할 서버 도메인을 입력해 주세요.
@@ -113,20 +113,10 @@ function OrderConfirm() {
             }
         }
 
-        // 결제창에 보낼 Object Set
-        console.log('Object Set:', obj);
+        // 파트너 인증 - 클라이언트 키(clientKey)
+        obj.clientKey = process.env.REACT_APP_CLIENT_KEY;
 
-        axios.post('/api/auth').then(res => {
-            console.log('Auth Result:', res.data);
-
-                obj.PCD_AUTH_KEY = res.data.AuthKey;      // 가맹점 인증 후 리턴 받은 AuthKey Token
-                obj.PCD_PAY_URL = res.data.return_url;    // 가맹점 인증 후 리턴 받은 결제요청 URL
-
-            console.log("결제창 호출 파라미터: ", obj);
-            window.PaypleCpayAuthCheck(obj);
-        }).catch(err => {
-            console.error(err);
-        });
+        window.PaypleCpayAuthCheck(obj);
     }
     return (
         <div>
