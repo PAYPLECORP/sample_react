@@ -56,8 +56,6 @@ function OrderConfirm() {
         if (content.is_direct === 'Y' ? obj.PCD_RST_URL = process.env.REACT_APP_REMOTE_HOSTNAME + '/api' : obj.PCD_RST_URL = '/react/order_result') ;
         // obj.PCD_RST_URL = pcd_rst_url;							 // (필수) 결제(요청)결과 RETURN URL
 
-        obj.payple_auth_file = '';	                                 // 인증파일경로 /절대경로/payple_auth_file (node.js => [app.js] app.post('/pg/auth', ...) {..}
-
         // (선택) 결과를 받고자 하는 callback 함수명 (callback함수를 설정할 경우 PCD_RST_URL 이 작동하지 않음)
         // ref: https://developer.payple.kr/service/faq
         obj.callbackFunction = getResult;
