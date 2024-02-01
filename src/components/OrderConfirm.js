@@ -76,7 +76,7 @@ function OrderConfirm() {
          *  최초결제 및 단건(일반,비회원)결제
          */
         else {
-            // 간편결제 여부('N') or 결제창 버전 빈 값
+            // 간편결제 여부('N')
             if (content.simple_flag !== 'Y' || content.payple_payer_id === '') {
                 obj.PCD_PAYER_NO = content.buyer_no;				  // (선택) 가맹점 회원 고유번호 (결과전송 시 입력값 그대로 RETURN)
                 obj.PCD_PAYER_NAME = content.buyer_name;			  // (선택) 결제자 이름
@@ -92,7 +92,7 @@ function OrderConfirm() {
                 obj.PCD_PAY_MONTH = content.pay_month;				  // (PCD_REGULER_FLAG = Y 일때 필수) [정기결제] 결제 구분 월 (PCD_REGULER_FLAG : 'Y' 일때 필수)
                 obj.PCD_TAXSAVE_FLAG = content.is_taxsave;			  // (선택) 현금영수증 발행 여부 (Y|N)
             }
-            // 간편결제 여부('N') or 결제창 버전 포함, (재결제)
+            // 간편결제 여부('Y'), 등록된 빌링키(PCD_PAYER_ID)의 결제창 호출
             else if (content.simple_flag === 'Y' && content.payple_payer_id !== '') {
                 obj.PCD_SIMPLE_FLAG = content.simple_flag;			  // 간편결제 여부 (Y|N)
                 //-- PCD_PAYER_ID 는 소스상에 표시하지 마시고 반드시 Server Side Script 를 이용하여 불러오시기 바랍니다. --//
